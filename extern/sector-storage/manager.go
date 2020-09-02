@@ -3,6 +3,7 @@ package sectorstorage
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 
@@ -287,6 +288,7 @@ func (m *Manager) NewSector(ctx context.Context, sector abi.SectorID) error {
 }
 
 func (m *Manager) AddPiece(ctx context.Context, sector abi.SectorID, existingPieces []abi.UnpaddedPieceSize, sz abi.UnpaddedPieceSize, r io.Reader) (abi.PieceInfo, error) {
+	fmt.Println("AddPiece---")
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
