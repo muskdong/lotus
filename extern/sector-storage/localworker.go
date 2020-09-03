@@ -39,6 +39,7 @@ type LocalWorker struct {
 }
 
 func NewLocalWorker(wcfg WorkerConfig, store stores.Store, local *stores.Local, sindex stores.SectorIndex) *LocalWorker {
+	fmt.Println("[Worker]NewLocalWorker---------tasktype:",wcfg.TaskTypes)
 	acceptTasks := map[sealtasks.TaskType]struct{}{}
 	for _, taskType := range wcfg.TaskTypes {
 		acceptTasks[taskType] = struct{}{}
