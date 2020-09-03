@@ -199,12 +199,14 @@ func schedNop(context.Context, Worker) error {
 }
 
 func schedFetch(sector abi.SectorID, ft stores.SectorFileType, ptype stores.PathType, am stores.AcquireMode) func(context.Context, Worker) error {
+	fmt.Println("schedFetch---")
 	return func(ctx context.Context, worker Worker) error {
 		return worker.Fetch(ctx, sector, ft, ptype, am)
 	}
 }
 
 func (m *Manager) ReadPiece(ctx context.Context, sink io.Writer, sector abi.SectorID, offset storiface.UnpaddedByteIndex, size abi.UnpaddedPieceSize, ticket abi.SealRandomness, unsealed cid.Cid) error {
+	fmt.Println("ReadPiece---")
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
@@ -287,6 +289,7 @@ func (m *Manager) NewSector(ctx context.Context, sector abi.SectorID) error {
 	return nil
 }
 
+
 func (m *Manager) AddPiece(ctx context.Context, sector abi.SectorID, existingPieces []abi.UnpaddedPieceSize, sz abi.UnpaddedPieceSize, r io.Reader) (abi.PieceInfo, error) {
 	fmt.Println("AddPiece---")
 	ctx, cancel := context.WithCancel(ctx)
@@ -318,6 +321,7 @@ func (m *Manager) AddPiece(ctx context.Context, sector abi.SectorID, existingPie
 }
 
 func (m *Manager) SealPreCommit1(ctx context.Context, sector abi.SectorID, ticket abi.SealRandomness, pieces []abi.PieceInfo) (out storage.PreCommit1Out, err error) {
+	fmt.Println("SealPreCommit1-------")
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
@@ -342,6 +346,7 @@ func (m *Manager) SealPreCommit1(ctx context.Context, sector abi.SectorID, ticke
 }
 
 func (m *Manager) SealPreCommit2(ctx context.Context, sector abi.SectorID, phase1Out storage.PreCommit1Out) (out storage.SectorCids, err error) {
+	fmt.Println("SealPreCommit2-------")
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
@@ -363,6 +368,7 @@ func (m *Manager) SealPreCommit2(ctx context.Context, sector abi.SectorID, phase
 }
 
 func (m *Manager) SealCommit1(ctx context.Context, sector abi.SectorID, ticket abi.SealRandomness, seed abi.InteractiveSealRandomness, pieces []abi.PieceInfo, cids storage.SectorCids) (out storage.Commit1Out, err error) {
+	fmt.Println("SealCommit1-------")
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
@@ -387,6 +393,7 @@ func (m *Manager) SealCommit1(ctx context.Context, sector abi.SectorID, ticket a
 }
 
 func (m *Manager) SealCommit2(ctx context.Context, sector abi.SectorID, phase1Out storage.Commit1Out) (out storage.Proof, err error) {
+	fmt.Println("SealCommit2-------")
 	selector := newTaskSelector()
 
 	err = m.sched.Schedule(ctx, sector, sealtasks.TTCommit2, selector, schedNop, func(ctx context.Context, w Worker) error {
@@ -402,6 +409,7 @@ func (m *Manager) SealCommit2(ctx context.Context, sector abi.SectorID, phase1Ou
 }
 
 func (m *Manager) FinalizeSector(ctx context.Context, sector abi.SectorID, keepUnsealed []storage.Range) error {
+	fmt.Println("FinalizeSector-------")
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
