@@ -157,7 +157,7 @@ var fsmPlanners = map[SectorState]func(events []statemachine.Event, state *Secto
 func (m *Sealing) plan(events []statemachine.Event, state *SectorInfo) (func(statemachine.Context, SectorInfo) error, uint64, error) {
 	/////
 	// First process all events
-
+	fmt.Println("[Sealing]plan------------")
 	for _, event := range events {
 		e, err := json.Marshal(event)
 		if err != nil {
